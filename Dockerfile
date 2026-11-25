@@ -15,8 +15,9 @@ ARG OPENPRINTHQ_UI_VERSION
 ARG OPENPRINTHQ_UI_COMMIT
 RUN apk add --no-cache git
 RUN test -n "$OPENPRINTHQ_UI_VERSION" && test -n "$OPENPRINTHQ_UI_COMMIT" \
- && git clone -q --depth 1 --branch "$OPENPRINTHQ_UI_VERSION" "$OPENPRINTHQ_UI_REPO" /ui \
- && test "$(git -C /ui rev-parse HEAD)" = "$OPENPRINTHQ_UI_COMMIT" \
+ && git clone -q --depth 1 --branch "$OPENPRINTHQ_UI_VERSION" "$OPENPRINTHQ_UI_REPO" /ui-repo \
+ && test "$(git -C /ui-repo rev-parse HEAD)" = "$OPENPRINTHQ_UI_COMMIT" \
+ && mv /ui-repo/ui /ui && rm -rf /ui-repo \
  && cd /ui && npm ci --omit=dev --omit=peer --ignore-scripts --no-audit --no-fund
 
 FROM --platform=$BUILDPLATFORM python:3.12-alpine AS convert
